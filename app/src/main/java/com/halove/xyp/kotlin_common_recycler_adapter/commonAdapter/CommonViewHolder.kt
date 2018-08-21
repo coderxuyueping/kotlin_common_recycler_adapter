@@ -1,4 +1,4 @@
-package com.halove.xyp.kotlin_common_recycler_adapter
+package com.halove.xyp.kotlin_common_recycler_adapter.commonAdapter
 
 import android.support.v7.widget.RecyclerView
 import android.util.SparseArray
@@ -10,19 +10,14 @@ import android.view.ViewGroup
  * Created by xyp on 2018/8/20.
  * 通用的ViewHolder
  */
-class CommonViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootView) {
+class CommonViewHolder(val rootView: View) : RecyclerView.ViewHolder(rootView) {
     private val childViews: SparseArray<View> by lazy { SparseArray<View>() }
 
     companion object {
-        fun createViewHolder(parent: ViewGroup, layoutId: Int): CommonViewHolder{
+        fun createViewHolder(parent: ViewGroup, layoutId: Int): CommonViewHolder {
             return CommonViewHolder(LayoutInflater.from(parent.context).inflate(layoutId, parent, false))
         }
     }
-
-    /**
-     * 获取根布局
-     */
-    fun getRootView() = rootView
 
     /**
      * 获取布局中的view

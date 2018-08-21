@@ -8,9 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.halove.xyp.kotlin_common_recycler_adapter.CommonAdapter;
-import com.halove.xyp.kotlin_common_recycler_adapter.CommonData;
-import com.halove.xyp.kotlin_common_recycler_adapter.CommonViewHolder;
+import com.halove.xyp.kotlin_common_recycler_adapter.commonAdapter.CommonAdapter;
+import com.halove.xyp.kotlin_common_recycler_adapter.commonAdapter.CommonData;
+import com.halove.xyp.kotlin_common_recycler_adapter.commonAdapter.CommonViewHolder;
 import com.halove.xyp.kotlin_common_recycler_adapter.R;
 
 import java.util.ArrayList;
