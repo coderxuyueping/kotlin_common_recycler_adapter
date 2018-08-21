@@ -1,4 +1,4 @@
-package com.halove.xyp.kotlin_common_recycler_adapter.dCommonAdapter
+package com.halove.xyp.common_adapter.dCommonAdapter
 
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView

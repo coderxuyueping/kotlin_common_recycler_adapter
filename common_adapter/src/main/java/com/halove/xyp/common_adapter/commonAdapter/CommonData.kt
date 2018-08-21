@@ -1,4 +1,4 @@
-package com.halove.xyp.kotlin_common_recycler_adapter.commonAdapter
+package com.halove.xyp.common_adapter.commonAdapter
 
 /**
  * Created by xyp on 2018/8/20.

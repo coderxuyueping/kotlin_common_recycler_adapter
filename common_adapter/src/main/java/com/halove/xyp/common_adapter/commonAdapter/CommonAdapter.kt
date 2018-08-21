@@ -1,4 +1,4 @@
-package com.halove.xyp.kotlin_common_recycler_adapter.commonAdapter
+package com.halove.xyp.common_adapter.commonAdapter
 
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView

@@ -4,7 +4,7 @@ import android.databinding.BaseObservable
 import android.databinding.Bindable
 import com.halove.xyp.kotlin_common_recycler_adapter.BR
 import com.halove.xyp.kotlin_common_recycler_adapter.R
-import com.halove.xyp.kotlin_common_recycler_adapter.commonAdapter.CommonData
+import com.halove.xyp.common_adapter.commonAdapter.CommonData
 
 /**
  * Created by xyp on 2018/8/20.

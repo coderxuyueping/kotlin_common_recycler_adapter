@@ -1,7 +1,7 @@
 package com.halove.xyp.kotlin_common_recycler_adapter.sample
 
 import com.halove.xyp.kotlin_common_recycler_adapter.BR
-import com.halove.xyp.kotlin_common_recycler_adapter.commonAdapter.CommonData
+import com.halove.xyp.common_adapter.commonAdapter.CommonData
 import com.halove.xyp.kotlin_common_recycler_adapter.R
 
 /**

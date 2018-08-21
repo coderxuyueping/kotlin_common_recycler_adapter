@@ -1,4 +1,4 @@
-package com.halove.xyp.kotlin_common_recycler_adapter.dCommonAdapter
+package com.halove.xyp.common_adapter.dCommonAdapter
 
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.halove.xyp.kotlin_common_recycler_adapter.commonAdapter.CommonData
+import com.halove.xyp.common_adapter.commonAdapter.CommonData
 
 /**
  * Created by xyp on 2018/8/20.
@@ -20,7 +20,7 @@ class DCommonAdapter @JvmOverloads constructor(private val datas: List<CommonDat
     override fun getItemViewType(position: Int) = datas[position].getType()
 
     //外部传进来的type需要是布局id，便于这里直接使用
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DCommonViewHolder{
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DCommonViewHolder {
        val dataBinding = DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(parent.context), viewType, parent,false)
         return DCommonViewHolder.createViewHolder(dataBinding.root, dataBinding)
     }

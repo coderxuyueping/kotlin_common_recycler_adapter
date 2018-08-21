@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.widget.TextView
-import com.halove.xyp.kotlin_common_recycler_adapter.commonAdapter.CommonAdapter
-import com.halove.xyp.kotlin_common_recycler_adapter.commonAdapter.CommonData
+import com.halove.xyp.common_adapter.commonAdapter.CommonAdapter
+import com.halove.xyp.common_adapter.commonAdapter.CommonData
 import com.halove.xyp.kotlin_common_recycler_adapter.R
-import com.halove.xyp.kotlin_common_recycler_adapter.dCommonAdapter.DCommonAdapter
+import com.halove.xyp.common_adapter.dCommonAdapter.DCommonAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
