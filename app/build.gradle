@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 
@@ -9,7 +9,7 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.halove.xyp.kotlin_common_recycler_adapter"
+//        applicationId "com.halove.xyp.kotlin_common_recycler_adapter"
         minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
