@@ -1,9 +1,9 @@
 package com.halove.xyp.common_adapter.commonAdapter
 
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
 /**
  * Created by xyp on 2018/8/20.
@@ -22,8 +22,7 @@ class CommonAdapter @JvmOverloads constructor(private val datas: List<CommonData
         bindData(holder, datas[position])
 
         holder.rootView.setOnClickListener {
-            if (onItemClick != null)
-                onItemClick!!.onItemClick(position)
+                onItemClick?.onItemClick(position)
         }
     }
 

@@ -1,9 +1,9 @@
 package com.halove.xyp.common_adapter.dCommonAdapter
 
-import android.databinding.ViewDataBinding
-import android.support.v7.widget.RecyclerView
 import android.util.SparseArray
 import android.view.View
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * Created by xyp on 2018/8/21.

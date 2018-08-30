@@ -1,4 +1,4 @@
-package com.halove.xyp.common_adapter.dCommonAdapter
+package com.halove.xyp.common_adapter.MVVMAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,36 +7,46 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.halove.xyp.common_adapter.commonAdapter.CommonData
+import com.halove.xyp.common_adapter.commonAdapter.CommonViewHolder
+import com.halove.xyp.common_adapter.dCommonAdapter.DCommonViewHolder
 
 /**
- * Created by xyp on 2018/8/20.
+ * Created by xyp on 2018/8/30.
  * 支持单布局与多布局的适配器
  */
-class DCommonAdapter @JvmOverloads constructor(private val datas: List<CommonData>, private val isFullSpan: (position: Int) -> Boolean = {false}) : RecyclerView.Adapter<DCommonViewHolder>() {
+class MDCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, private val data: ArrayList<Any>,private val isFullSpan: (position: Int) -> Boolean = {false}) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun getItemCount() = datas.size
+    override fun getItemCount() = if(data.size == 0 && builder.getEmptyLayout() != -1) 1 else data.size
 
-    override fun getItemViewType(position: Int) = datas[position].getType()
+    override fun getItemViewType(position: Int) = if(data.size == 0 && builder.getEmptyLayout() != -1) builder.getEmptyLayout() else builder.getType(data[position])
 
     //外部传进来的type需要是布局id，便于这里直接使用
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DCommonViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        //因为空视图用来展示用的，不需要绑定数据
+        if(data.size == 0)
+            return CommonViewHolder.createViewHolder(parent, viewType)
        val dataBinding = DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(parent.context), viewType, parent,false)
         return DCommonViewHolder.createViewHolder(dataBinding.root, dataBinding)
     }
 
-    override fun onBindViewHolder(holder: DCommonViewHolder, position: Int) {
-        holder.dataBinding.setVariable(datas[position].getBR(), datas[position])
-        holder.dataBinding.executePendingBindings()//防止闪烁
-        holder.rootView.setOnClickListener {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if(data.size != 0 && holder is DCommonViewHolder){
+            holder.dataBinding.setVariable(builder.getBR(data[position]), data[position])
+            holder.dataBinding.executePendingBindings()//防止闪烁
+            holder.rootView.setOnClickListener {
                 onItemClick?.onItemClick(position)
-        }
+            }
+        }else if(holder is CommonViewHolder)
+            holder.rootView.setOnClickListener {
+                onItemClick?.onItemClick(position)
+            }
+
     }
 
     /**
      * 为瀑布管理器设置是否独占一列
      */
-    override fun onViewAttachedToWindow(holder: DCommonViewHolder) {
+    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
         super.onViewAttachedToWindow(holder)
         if (isFullSpan(holder.layoutPosition)) {
             val lp = holder.itemView.layoutParams
