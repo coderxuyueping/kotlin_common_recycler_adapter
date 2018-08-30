@@ -86,9 +86,9 @@ class MCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, pr
 
     override fun addHead(headBuilder: HeadBuilder){
         headBuilders.add(headBuilder)
-        notifyItemInserted(headBuilders.size-1)
+        notifyItemInserted(headBuilders.size - 1)
         //刷新position
-        notifyItemRangeChanged(headBuilders.size - 1, data.size+1)
+        notifyItemRangeChanged(headBuilders.size - 1, data.size + 1)
     }
 
 
@@ -126,5 +126,5 @@ class MCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, pr
     /**
      * 空视图是否在显示
      */
-    fun emptyVisible() = data.size == 0
+    fun emptyVisible() = data.size == 0 && builder.getEmptyLayout() != -1
 }

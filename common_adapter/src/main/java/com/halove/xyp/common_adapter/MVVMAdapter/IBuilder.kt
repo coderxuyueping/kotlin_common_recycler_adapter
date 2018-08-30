@@ -11,7 +11,7 @@ interface IBuilder {
     fun getType(data: Any): Int
 
     /**
-     * 提供空视图布局id
+     * 提供空视图布局id,不重写则不显示空视图
      */
     fun getEmptyLayout(): Int = -1
 
