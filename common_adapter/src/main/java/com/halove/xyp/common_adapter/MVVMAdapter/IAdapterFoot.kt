@@ -7,7 +7,7 @@ interface IAdapterFoot {
     /**
      * 添加尾布局
      */
-    fun addFoot(headBuilder: HeadBuilder)
+    fun addFoot(headFootBuilder: HeadFootBuilder)
 
     /**
      * 移除某一个位置的尾布局

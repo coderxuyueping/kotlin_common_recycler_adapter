@@ -7,7 +7,7 @@ interface IAdapterHead {
     /**
      * 添加头布局
      */
-    fun addHead(headBuilder: HeadBuilder)
+    fun addHead(headFootBuilder: HeadFootBuilder)
 
     /**
      * 移除某一个位置的头布局

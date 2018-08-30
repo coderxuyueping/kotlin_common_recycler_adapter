@@ -10,10 +10,13 @@ import com.halove.xyp.common_adapter.commonAdapter.CommonViewHolder
  * Created by xyp on 2018/8/30.
  * 支持单布局与多布局的适配器,可显示空视图，添加头尾布局
  */
-class MCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, private val data: ArrayList<Any>,private val isFullSpan: (position: Int) -> Boolean = {false}, private val bindData: (holder: CommonViewHolder, data: Any) -> Unit) : RecyclerView.Adapter<CommonViewHolder>(), IAdapterHead {
+class MCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, private val data: ArrayList<Any>,private val isFullSpan: (position: Int) -> Boolean = {false}, private val bindData: (holder: CommonViewHolder, data: Any) -> Unit) : RecyclerView.Adapter<CommonViewHolder>(), IAdapterHead, IAdapterFoot{
 
     //存放头布局的builder
-    private val headBuilders: ArrayList<HeadBuilder> by lazy { ArrayList<HeadBuilder>() }
+    private val headBuilders: ArrayList<HeadFootBuilder> by lazy { ArrayList<HeadFootBuilder>() }
+
+    //存放尾布局的builder
+    private val footBuilders: ArrayList<HeadFootBuilder> by lazy { ArrayList<HeadFootBuilder>() }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommonViewHolder {
         return CommonViewHolder.createViewHolder(parent, viewType)
@@ -33,22 +36,32 @@ class MCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, pr
             return
         }
 
-        if(data.size != 0)
+        if(data.size != 0 && position < data.size + headBuilders.size - 1)
             bindData(holder, data[position - headBuilders.size])
+
+        footBuilders.forEach{
+            it.bindData(holder.rootView, it.headData)
+        }
 
     }
 
     override fun getItemCount(): Int {
         //如果数据源为空并且外部设置了显示的空视图布局,则显示一个空视图,注意：需要算上头布局
         if(data.size == 0 && builder.getEmptyLayout() != -1)
-            return 1 + headBuilders.size
+            return 1 + headBuilders.size + footBuilders.size
 
-        return data.size + headBuilders.size
+        return data.size + headBuilders.size + footBuilders.size
     }
 
     override fun getItemViewType(position: Int): Int {
         if (headBuilders.size > position)
             return headBuilders[position].getType(headBuilders[position].headData)
+
+        //需要算上空视图
+        val dataSize = if(data.size == 0) 1 else data.size
+
+        if(position > headBuilders.size + dataSize - 1)
+            return footBuilders[position - headBuilders.size - dataSize].getType(footBuilders[position - headBuilders.size - dataSize].headData)
 
         return if(data.size == 0 && builder.getEmptyLayout() != -1) builder.getEmptyLayout()
         else builder.getType(data[position - headBuilders.size])
@@ -84,11 +97,11 @@ class MCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, pr
 
 
 
-    override fun addHead(headBuilder: HeadBuilder){
-        headBuilders.add(headBuilder)
+    override fun addHead(headFootBuilder: HeadFootBuilder){
+        headBuilders.add(headFootBuilder)
         notifyItemInserted(headBuilders.size - 1)
         //刷新position
-        notifyItemRangeChanged(headBuilders.size - 1, data.size + 1)
+        notifyItemRangeChanged(headBuilders.size - 1, data.size + 1 + footBuilders.size)
     }
 
 
@@ -96,13 +109,45 @@ class MCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, pr
         if(position >= headBuilders.size) return
         headBuilders.removeAt(position)
         notifyItemRemoved(position)
-        notifyItemRangeChanged(position, data.size + headBuilders.size - position - 1)
+        notifyItemRangeChanged(position, lastPosition() - position + 1)
     }
 
 
     override fun removeAllHead(){
         if(headBuilders.size != 0){
             headBuilders.clear()
+            notifyDataSetChanged()
+        }
+    }
+
+    /**
+     * 添加尾布局
+     */
+    override fun addFoot(headFootBuilder: HeadFootBuilder) {
+        val dataSize = if(data.size == 0) 1 else data.size
+        footBuilders.add(headFootBuilder)
+        notifyItemInserted(dataSize + headBuilders.size + footBuilders.size - 1)
+        //刷新position
+        notifyItemRangeChanged(dataSize + headBuilders.size + footBuilders.size - 1, 1)
+    }
+
+    /**
+     * 移除某一个位置的尾布局
+     */
+    override fun removeFootAt(position: Int) {
+        val dataSize = if(data.size == 0) 1 else data.size
+        if((position > dataSize + headBuilders.size + footBuilders.size - 1) or (position < dataSize + headBuilders.size)) return
+        footBuilders.removeAt(footBuilders.size - 1 - (lastPosition() - position))
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, lastPosition() - position + 1 )
+    }
+
+    /**
+     * 移除全部尾布局
+     */
+    override fun removeAllFoot() {
+        if(footBuilders.size != 0){
+            footBuilders.clear()
             notifyDataSetChanged()
         }
     }
@@ -124,7 +169,22 @@ class MCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, pr
     fun headSize() = headBuilders.size
 
     /**
-     * 空视图是否在显示
+     * 尾布局的数量
+     */
+    fun footSize() = footBuilders.size
+
+    /**
+     * 数据源长度
+     */
+    fun dataSize() = data.size
+
+    /**
+     * 空视图是否在显示,注意空视图也占一个position
      */
     fun emptyVisible() = data.size == 0 && builder.getEmptyLayout() != -1
+
+    /**
+     * 获取最后一个position
+     */
+    fun lastPosition() = if(emptyVisible()) headBuilders.size + footBuilders.size else headBuilders.size + data.size + footBuilders.size - 1
 }

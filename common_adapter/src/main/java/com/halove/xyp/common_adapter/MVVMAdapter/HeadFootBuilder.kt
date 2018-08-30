@@ -4,9 +4,9 @@ import android.view.View
 
 /**
  * Created by xyp on 2018/8/30.
- * 添加头布局的Builder
+ * 添加头尾布局的Builder
  */
-abstract class HeadBuilder(var headData: Any) : IBuilder{
+abstract class HeadFootBuilder(var headData: Any) : IBuilder{
     /**
      * 根据数据源传入对应的type,type对应布局id
      */

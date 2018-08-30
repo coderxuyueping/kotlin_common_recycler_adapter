@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.halove.xyp.kotlin_common_recycler_adapter.sample.MainActivity">
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/btn_addfoot2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="动态修改数据"
+        android:text="添加尾布局2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/btn_remove"
         app:layout_constraintTop_toTopOf="parent" />
@@ -19,7 +19,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="清空数据"
-        app:layout_constraintLeft_toRightOf="@+id/btn"
+        app:layout_constraintLeft_toRightOf="@+id/btn_addfoot2"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -65,11 +65,43 @@
         android:layout_height="wrap_content"
         android:text="移除全部头布局"
         app:layout_constraintTop_toBottomOf="@+id/btn_add_head2"
-        app:layout_constraintBottom_toTopOf="@+id/recycler_view"/>
+        app:layout_constraintBottom_toTopOf="@+id/btn_removefoot1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/btn_addfoot1"/>
+
+    <Button
+        android:id="@+id/btn_addfoot1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="添加尾布局1"
+        app:layout_constraintTop_toBottomOf="@+id/btn_add_head2"
+        app:layout_constraintBottom_toTopOf="@+id/btn_removefoot1"
+        app:layout_constraintLeft_toRightOf="@+id/btn_remove_all"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <Button
+        android:id="@+id/btn_removefoot1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="移除最后的尾布局"
+        app:layout_constraintTop_toBottomOf="@+id/btn_remove_all"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view"
+        app:layout_constraintRight_toLeftOf="@+id/btn_removeallfoot"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <Button
+        android:id="@+id/btn_removeallfoot"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="移除全部尾布局"
+        app:layout_constraintTop_toBottomOf="@+id/btn_remove_all"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view"
+        app:layout_constraintLeft_toRightOf="@+id/btn_removefoot1"
+        app:layout_constraintRight_toRightOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        app:layout_constraintTop_toBottomOf="@+id/btn_remove_all"
+        app:layout_constraintTop_toBottomOf="@+id/btn_removefoot1"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="0dp"/>

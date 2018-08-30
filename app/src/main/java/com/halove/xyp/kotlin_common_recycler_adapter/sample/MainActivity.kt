@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.halove.xyp.common_adapter.MVVMAdapter.HeadBuilder
+import com.halove.xyp.common_adapter.MVVMAdapter.HeadFootBuilder
 import com.halove.xyp.common_adapter.MVVMAdapter.IBuilder
 import com.halove.xyp.common_adapter.MVVMAdapter.MCommonAdapter
 import com.halove.xyp.common_adapter.MVVMAdapter.MDCommonAdapter
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         recycler_view.layoutManager = LinearLayoutManager(this)
 
-        mvvmDAdapter()
+        mvvmAdapter()
 
     }
 
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
         recycler_view.adapter = adapter
 
 
-        //测试数据源自动更新功能
+   /*     //测试数据源自动更新功能
         btn.setOnClickListener {
             //添加新的数据到数据源中
 //            datas.add(Bean2("数据模板2_"))
@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
             if(data is Bean3){
                 data.msg = "修改的數據"
             }
-        }
+        }*/
     }
 
 
@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity() {
         val datas = arrayListOf(MVVMBean1("徐大哈布局1",20),MVVMBean2("徐大哈布局2"),
                 MVVMBean1("徐大哈布局1",20),MVVMBean1("徐大哈布局1",20),
                 MVVMBean2("徐大哈布局2"),MVVMBean1("徐大哈布局1",20))
-        recycler_view.adapter = MCommonAdapter(object : IBuilder{
+        val adapter = MCommonAdapter(object : IBuilder{
             /**
              * 提供空视图布局id
              */
@@ -157,20 +157,22 @@ class MainActivity : AppCompatActivity() {
 
 
 
+        recycler_view.adapter = adapter
+
         btn_remove.setOnClickListener {
             datas.clear()
-            (recycler_view.adapter as MCommonAdapter).notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         }
 
         btn_add.setOnClickListener {
             datas.addAll(arrayListOf(MVVMBean1("徐大哈布局1",20),MVVMBean2("徐大哈布局2"),
                     MVVMBean1("徐大哈布局1",20),MVVMBean1("徐大哈布局1",20),
                     MVVMBean2("徐大哈布局2"),MVVMBean1("徐大哈布局1",20)))
-            (recycler_view.adapter as MCommonAdapter).notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         }
 
         btn_add_head1.setOnClickListener {
-            (recycler_view.adapter as MCommonAdapter).addHead(object : HeadBuilder(HeadBean1("我是头布局1")){
+            adapter.addHead(object : HeadFootBuilder(HeadBean1("我是头布局1")){
                 /**
                  * 根据数据源传入对应的type,type对应布局id
                  */
@@ -189,7 +191,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btn_add_head2.setOnClickListener {
-            (recycler_view.adapter as MCommonAdapter).addHead(object : HeadBuilder(HeadBean2("我是头布局2")){
+            adapter.addHead(object : HeadFootBuilder(HeadBean2("我是头布局2")){
                 /**
                  * 根据数据源传入对应的type,type对应布局id
                  */
@@ -208,18 +210,66 @@ class MainActivity : AppCompatActivity() {
         }
 
         btn_remove_head.setOnClickListener {
-            (recycler_view.adapter as MCommonAdapter).removeHeadAt(0)
+            adapter.removeHeadAt(1)
         }
 
         btn_remove_all.setOnClickListener {
-            (recycler_view.adapter as MCommonAdapter).removeAllHead()
+            adapter.removeAllHead()
         }
 
-        (recycler_view.adapter as MCommonAdapter).onItemClick = object : MCommonAdapter.OnItemClick{
+        adapter.onItemClick = object : MCommonAdapter.OnItemClick{
             override fun onItemClick(position: Int) {
                 toast("$position")
             }
 
+        }
+
+
+        btn_addfoot1.setOnClickListener {
+            adapter.addFoot(object : HeadFootBuilder(HeadBean1("我是尾布局1")){
+                /**
+                 * 根据数据源传入对应的type,type对应布局id
+                 */
+                override fun getType(data: Any): Int {
+                    return R.layout.head1
+                }
+
+                override fun bindData(view: View, data: Any){
+                    if(data is HeadBean1){
+                        val tv = view.findViewById<TextView>(R.id.tv_head1)
+                        tv?.text = data.head
+                    }
+                }
+
+            })
+        }
+
+
+        btn_addfoot2.setOnClickListener {
+            adapter.addFoot(object : HeadFootBuilder(HeadBean2("我是尾布局2")){
+                /**
+                 * 根据数据源传入对应的type,type对应布局id
+                 */
+                override fun getType(data: Any): Int {
+                    return R.layout.head2
+                }
+
+                override fun bindData(view: View, data: Any){
+                    if(data is HeadBean2){
+                        val tv = view.findViewById<TextView>(R.id.tv_head2)
+                        tv?.text = data.head
+                    }
+                }
+
+            })
+        }
+
+        btn_removefoot1.setOnClickListener {
+            adapter.removeFootAt(adapter.lastPosition() - 2)
+        }
+
+        btn_removeallfoot.setOnClickListener {
+            adapter.removeAllFoot()
         }
     }
 
@@ -278,7 +328,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btn_add_head1.setOnClickListener {
-            (recycler_view.adapter as MDCommonAdapter).addHead(object : HeadBuilder(HeadBean1("我是头布局1")){
+            (recycler_view.adapter as MDCommonAdapter).addHead(object : HeadFootBuilder(HeadBean1("我是头布局1")){
                 /**
                  * 根据数据源传入对应的type,type对应布局id
                  */
@@ -294,7 +344,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btn_add_head2.setOnClickListener {
-            (recycler_view.adapter as MDCommonAdapter).addHead(object : HeadBuilder(HeadBean2("我是头布局2")){
+            (recycler_view.adapter as MDCommonAdapter).addHead(object : HeadFootBuilder(HeadBean2("我是头布局2")){
                 /**
                  * 根据数据源传入对应的type,type对应布局id
                  */

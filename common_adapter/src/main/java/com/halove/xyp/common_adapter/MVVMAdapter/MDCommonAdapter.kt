@@ -17,7 +17,7 @@ import com.halove.xyp.common_adapter.dCommonAdapter.DCommonViewHolder
 class MDCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, private val data: ArrayList<Any>,private val isFullSpan: (position: Int) -> Boolean = {false}) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), IAdapterHead {
 
     //存放头布局的builder
-    private val headBuilders: ArrayList<HeadBuilder> by lazy { ArrayList<HeadBuilder>() }
+    private val headBuilders: ArrayList<HeadFootBuilder> by lazy { ArrayList<HeadFootBuilder>() }
 
     override fun getItemCount(): Int {
         //如果数据源为空并且外部设置了显示的空视图布局,则显示一个空视图,注意：需要算上头布局
@@ -93,8 +93,8 @@ class MDCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, p
     }
 
 
-    override fun addHead(headBuilder: HeadBuilder){
-        headBuilders.add(headBuilder)
+    override fun addHead(headFootBuilder: HeadFootBuilder){
+        headBuilders.add(headFootBuilder)
         notifyItemInserted(headBuilders.size - 1)
         //刷新position
         notifyItemRangeChanged(headBuilders.size - 1, data.size + 1)
