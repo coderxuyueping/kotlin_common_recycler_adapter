@@ -2,9 +2,11 @@ package com.halove.xyp.kotlin_common_recycler_adapter.sample
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.halove.xyp.common_adapter.MVVMAdapter.HeadBuilder
 import com.halove.xyp.common_adapter.MVVMAdapter.IBuilder
 import com.halove.xyp.common_adapter.MVVMAdapter.MCommonAdapter
 import com.halove.xyp.common_adapter.MVVMAdapter.MDCommonAdapter
@@ -166,6 +168,59 @@ class MainActivity : AppCompatActivity() {
                     MVVMBean2("徐大哈布局2"),MVVMBean1("徐大哈布局1",20)))
             (recycler_view.adapter as MCommonAdapter).notifyDataSetChanged()
         }
+
+        btn_add_head1.setOnClickListener {
+            (recycler_view.adapter as MCommonAdapter).addHead(object : HeadBuilder(HeadBean1("我是头布局1")){
+                /**
+                 * 根据数据源传入对应的type,type对应布局id
+                 */
+                override fun getType(data: Any): Int {
+                    return R.layout.head1
+                }
+
+                override fun bindData(view: View, data: Any){
+                    if(data is HeadBean1){
+                        val tv = view.findViewById<TextView>(R.id.tv_head1)
+                        tv?.text = data.head
+                    }
+                }
+
+            })
+        }
+
+        btn_add_head2.setOnClickListener {
+            (recycler_view.adapter as MCommonAdapter).addHead(object : HeadBuilder(HeadBean2("我是头布局2")){
+                /**
+                 * 根据数据源传入对应的type,type对应布局id
+                 */
+                override fun getType(data: Any): Int {
+                    return R.layout.head2
+                }
+
+                override fun bindData(view: View, data: Any){
+                    if(data is HeadBean2){
+                        val tv = view.findViewById<TextView>(R.id.tv_head2)
+                        tv?.text = data.head
+                    }
+                }
+
+            })
+        }
+
+        btn_remove_head.setOnClickListener {
+            (recycler_view.adapter as MCommonAdapter).removeHeadAt(0)
+        }
+
+        btn_remove_all.setOnClickListener {
+            (recycler_view.adapter as MCommonAdapter).removeAllHead()
+        }
+
+        (recycler_view.adapter as MCommonAdapter).onItemClick = object : MCommonAdapter.OnItemClick{
+            override fun onItemClick(position: Int) {
+                toast("$position")
+            }
+
+        }
     }
 
 
@@ -209,6 +264,7 @@ class MainActivity : AppCompatActivity() {
         }, datas)
 
 
+
         btn_remove.setOnClickListener {
             datas.clear()
             (recycler_view.adapter as MDCommonAdapter).notifyDataSetChanged()
@@ -219,6 +275,53 @@ class MainActivity : AppCompatActivity() {
                     MVVMBean1("徐大哈布局1",20),MVVMBean1("徐大哈布局1",20),
                     MVVMBean2("徐大哈布局2"),MVVMBean1("徐大哈布局1",20)))
             (recycler_view.adapter as MDCommonAdapter).notifyDataSetChanged()
+        }
+
+        btn_add_head1.setOnClickListener {
+            (recycler_view.adapter as MDCommonAdapter).addHead(object : HeadBuilder(HeadBean1("我是头布局1")){
+                /**
+                 * 根据数据源传入对应的type,type对应布局id
+                 */
+                override fun getType(data: Any): Int {
+                    return R.layout.dhead1
+                }
+
+                override fun getBR(data: Any): Int {
+                    return BR.bean1
+                }
+
+            })
+        }
+
+        btn_add_head2.setOnClickListener {
+            (recycler_view.adapter as MDCommonAdapter).addHead(object : HeadBuilder(HeadBean2("我是头布局2")){
+                /**
+                 * 根据数据源传入对应的type,type对应布局id
+                 */
+                override fun getType(data: Any): Int {
+                    return R.layout.dhead2
+                }
+
+                override fun getBR(data: Any): Int {
+                    return BR.bean2
+                }
+
+            })
+        }
+
+        btn_remove_head.setOnClickListener {
+            (recycler_view.adapter as MDCommonAdapter).removeHeadAt(0)
+        }
+
+        btn_remove_all.setOnClickListener {
+            (recycler_view.adapter as MDCommonAdapter).removeAllHead()
+        }
+
+        (recycler_view.adapter as MDCommonAdapter).onItemClick = object : MDCommonAdapter.OnItemClick{
+            override fun onItemClick(position: Int) {
+                toast("$position")
+            }
+
         }
     }
 }
