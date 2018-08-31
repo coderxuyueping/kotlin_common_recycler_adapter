@@ -36,8 +36,10 @@ class MCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, pr
             return
         }
 
-        if(data.size != 0 && position < data.size + headBuilders.size - 1)
+        if(data.size != 0 && position < data.size + headBuilders.size) {
             bindData(holder, data[position - headBuilders.size])
+            return
+        }
 
         footBuilders.forEach{
             it.bindData(holder.rootView, it.headData)
@@ -45,12 +47,13 @@ class MCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, pr
 
     }
 
+    /**
+     * 没有数据源的情况下不显示尾布局
+     */
     override fun getItemCount(): Int {
         //如果数据源为空并且外部设置了显示的空视图布局,则显示一个空视图,注意：需要算上头布局
-        if(data.size == 0 && builder.getEmptyLayout() != -1)
-            return 1 + headBuilders.size + footBuilders.size
-
-        return data.size + headBuilders.size + footBuilders.size
+        return if(emptyVisible()) 1 + headBuilders.size
+        else data.size + headBuilders.size + if (data.size == 0) 0 else footBuilders.size
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -63,7 +66,7 @@ class MCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, pr
         if(position > headBuilders.size + dataSize - 1)
             return footBuilders[position - headBuilders.size - dataSize].getType(footBuilders[position - headBuilders.size - dataSize].headData)
 
-        return if(data.size == 0 && builder.getEmptyLayout() != -1) builder.getEmptyLayout()
+        return if(emptyVisible()) builder.getEmptyLayout()
         else builder.getType(data[position - headBuilders.size])
     }
 
@@ -98,10 +101,11 @@ class MCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, pr
 
 
     override fun addHead(headFootBuilder: HeadFootBuilder){
+        val dataSize = if(data.size == 0) 1 else data.size
         headBuilders.add(headFootBuilder)
         notifyItemInserted(headBuilders.size - 1)
         //刷新position
-        notifyItemRangeChanged(headBuilders.size - 1, data.size + 1 + footBuilders.size)
+        notifyItemRangeChanged(headBuilders.size - 1, dataSize + 1 + footBuilders.size)
     }
 
 
@@ -124,6 +128,8 @@ class MCommonAdapter @JvmOverloads constructor(private val builder: IBuilder, pr
      * 添加尾布局
      */
     override fun addFoot(headFootBuilder: HeadFootBuilder) {
+        //没有数据则不能添加尾布局
+        if(data.size == 0) return
         val dataSize = if(data.size == 0) 1 else data.size
         footBuilders.add(headFootBuilder)
         notifyItemInserted(dataSize + headBuilders.size + footBuilders.size - 1)

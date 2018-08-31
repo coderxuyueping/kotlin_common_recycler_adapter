@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         recycler_view.layoutManager = LinearLayoutManager(this)
 
-        mvvmAdapter()
+        mvvmDAdapter()
 
     }
 
@@ -124,9 +124,9 @@ class MainActivity : AppCompatActivity() {
             /**
              * 提供空视图布局id
              */
-            override fun getEmptyLayout(): Int {
-                return R.layout.empty
-            }
+//            override fun getEmptyLayout(): Int {
+//                return R.layout.empty
+//            }
 
             /**
              * 根据数据源传入对应的type,type对应布局id
@@ -282,13 +282,13 @@ class MainActivity : AppCompatActivity() {
                 MVVMBean1("徐大哈布局1",20),MVVMBean1("徐大哈布局1",20),
                 MVVMBean2("徐大哈布局2"),MVVMBean1("徐大哈布局1",20))
 
-        recycler_view.adapter = MDCommonAdapter(object : IBuilder{
+        val adapter = MDCommonAdapter(object : IBuilder{
             /**
              * 提供空视图布局id
              */
-//            override fun getEmptyLayout(): Int {
-//                return R.layout.empty
-//            }
+            override fun getEmptyLayout(): Int {
+                return R.layout.empty
+            }
 
             /**
              * 根据数据源传入对应的type,type对应布局id
@@ -313,22 +313,23 @@ class MainActivity : AppCompatActivity() {
 
         }, datas)
 
+        recycler_view.adapter = adapter
 
 
         btn_remove.setOnClickListener {
             datas.clear()
-            (recycler_view.adapter as MDCommonAdapter).notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         }
 
         btn_add.setOnClickListener {
             datas.addAll(arrayListOf(MVVMBean1("徐大哈布局1",20),MVVMBean2("徐大哈布局2"),
                     MVVMBean1("徐大哈布局1",20),MVVMBean1("徐大哈布局1",20),
                     MVVMBean2("徐大哈布局2"),MVVMBean1("徐大哈布局1",20)))
-            (recycler_view.adapter as MDCommonAdapter).notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         }
 
         btn_add_head1.setOnClickListener {
-            (recycler_view.adapter as MDCommonAdapter).addHead(object : HeadFootBuilder(HeadBean1("我是头布局1")){
+            adapter.addHead(object : HeadFootBuilder(HeadBean1("我是头布局1")){
                 /**
                  * 根据数据源传入对应的type,type对应布局id
                  */
@@ -344,7 +345,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btn_add_head2.setOnClickListener {
-            (recycler_view.adapter as MDCommonAdapter).addHead(object : HeadFootBuilder(HeadBean2("我是头布局2")){
+            adapter.addHead(object : HeadFootBuilder(HeadBean2("我是头布局2")){
                 /**
                  * 根据数据源传入对应的type,type对应布局id
                  */
@@ -360,18 +361,59 @@ class MainActivity : AppCompatActivity() {
         }
 
         btn_remove_head.setOnClickListener {
-            (recycler_view.adapter as MDCommonAdapter).removeHeadAt(0)
+            adapter.removeHeadAt(0)
         }
 
         btn_remove_all.setOnClickListener {
-            (recycler_view.adapter as MDCommonAdapter).removeAllHead()
+            adapter.removeAllHead()
         }
 
-        (recycler_view.adapter as MDCommonAdapter).onItemClick = object : MDCommonAdapter.OnItemClick{
+        adapter.onItemClick = object : MDCommonAdapter.OnItemClick{
             override fun onItemClick(position: Int) {
                 toast("$position")
             }
 
         }
+
+        btn_addfoot1.setOnClickListener {
+            adapter.addFoot(object : HeadFootBuilder(HeadBean1("我是尾布局1")){
+                /**
+                 * 根据数据源传入对应的type,type对应布局id
+                 */
+                override fun getType(data: Any): Int {
+                    return R.layout.dhead1
+                }
+
+                override fun getBR(data: Any): Int {
+                    return BR.bean1
+                }
+
+            })
+        }
+
+        btn_addfoot2.setOnClickListener {
+            adapter.addFoot(object : HeadFootBuilder(HeadBean2("我是尾布局2")){
+                /**
+                 * 根据数据源传入对应的type,type对应布局id
+                 */
+                override fun getType(data: Any): Int {
+                    return R.layout.dhead2
+                }
+
+                override fun getBR(data: Any): Int {
+                    return BR.bean2
+                }
+
+            })
+        }
+
+        btn_removeallfoot.setOnClickListener {
+            adapter.removeAllFoot()
+        }
+
+        btn_removefoot1.setOnClickListener {
+            adapter.removeFootAt(adapter.lastPosition() - 1)
+        }
+
     }
 }
